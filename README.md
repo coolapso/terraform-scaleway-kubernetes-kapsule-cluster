@@ -2,7 +2,7 @@
 # Terraform Scaleway Kapsule
 
 A Terraform module that creates a simple Kubernetes kapsule cluster,
-Nodes are added using [Kapsule-pool](https://github.com/4s3ti/kapsule-cluster) module.
+Nodes are added using [Kapsule-pool](https://github.com/4s3ti/kapsule-pool) module.
 
 ## Module Requirements
 
