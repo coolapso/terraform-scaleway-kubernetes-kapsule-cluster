@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.com/4s3ti/kapsule-cluster.svg?branch=master)](https://travis-ci.com/4s3ti/kapsule-cluster)
 # Terraform Scaleway Kapsule
 
 A Terraform module that creates a simple Kubernetes kapsule cluster,
