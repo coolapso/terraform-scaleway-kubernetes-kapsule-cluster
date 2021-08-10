@@ -2,11 +2,12 @@ os: linux
 dist: focal
 language: shell
 env:
-  - tf_version=0.15.15 
-  - tf_init_cli_options="-input=false" 
-# - tf_validation_cli_options="" 
-  - tf_plan_cli_options="-lock=false -input=false" 
-  - tf_apply_cli_options="-auto-approve -input=false"
+  global:
+    - tf_version=0.15.5 
+    - tf_init_cli_options="-input=false" 
+    - tf_validation_cli_options="" 
+    - tf_plan_cli_options="-lock=false -input=false" 
+    - tf_apply_cli_options="-auto-approve -input=false"
 
 branches:
   only:
@@ -18,20 +19,24 @@ before_install:
   - sudo mv terraform /usr/local/bin/
   - rm terraform_"$tf_version"_linux_amd64.zip
 
+stages:
+  - syntax
+  - validate & plan
+
 jobs:
   include:
-    - stage: Syntax
-      if: type = pull_request
+    - stage: syntax
+#      if: type = pull_request
       script:
         - echo "Checking syntax"
         - terraform fmt -check
 
-    - stage: terraform plan
+    - stage: validate & plan
       # Only run terraform validate and plan state if within a pull request
-      if: type = pull_request
+#     if: type = pull_request
       script:
         - echo "Executing Terraform Plan on pull request code"
-        - cd examples/terraform
+        - cd examples/terraform/
         - terraform init $tf_init_cli_options
         - terraform validate $tf_validation_cli_options
         - terraform plan $tf_plan_cli_options

@@ -18,7 +18,7 @@ module "k8s-cluster" {
 
 
 module "k8s-pool" {
-  source = "/home/f0rs3ti/Devel/iac/modules/scaleway/kapsule-pool"
+  source = "github.com/4s3ti/kapsule-pool"
 
   kapsule_cluster_id     = module.k8s-cluster.cluster_id
   pool_name              = "test"

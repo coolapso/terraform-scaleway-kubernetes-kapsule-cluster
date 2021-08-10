@@ -11,8 +11,7 @@ dependency "kapsule-cluster" {
 }
 
 terraform {
-# source = "https://git@github.com/4s3ti/kapsule-pool"
-  source = "/home/f0rs3ti/Devel/iac/modules/scaleway/kapsule-pool"
+  source = "github.com/4s3ti/kapsule-pool"
 }
 
 /* Add inputs here to override global inputs */
