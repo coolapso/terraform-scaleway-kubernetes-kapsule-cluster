@@ -56,6 +56,6 @@ Examples directory contains examples on how to use this module and add nodes to 
 
 *Please Refer to this documentation to find more about what values are accepted in this module arguments, as they can change due to provider updates.
 
-https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest
+https://registry.terraform.io/providers/scaleway/scaleway/latest/docs/resources/k8s_cluster
 
 https://registry.terraform.io/providers/scaleway/scaleway/latest/docs/resources/k8s_pool
