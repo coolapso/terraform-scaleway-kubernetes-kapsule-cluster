@@ -20,18 +20,19 @@ before_install:
   - rm terraform_"$tf_version"_linux_amd64.zip
 
 stages:
-  - syntax
-  - validate & plan
+  - lint
+  - test
+  - release
 
 jobs:
   include:
-    - stage: syntax
+    - stage: lint
 #      if: type = pull_request
       script:
         - echo "Checking syntax"
         - terraform fmt -check
 
-    - stage: validate & plan
+    - stage: test
       # Only run terraform validate and plan state if within a pull request
 #     if: type = pull_request
       script:
@@ -40,3 +41,16 @@ jobs:
         - terraform init $tf_init_cli_options
         - terraform validate $tf_validation_cli_options
         - terraform plan $tf_plan_cli_options
+
+    - stage: release
+      if: branch = master
+      language: node_js
+      node_js:
+        - 17
+      install:
+        - pip install mkdocs-material
+        - npm install @semantic-release/github -D
+        - npm install @semantic-release/changelog -D
+      script:
+        - npx semantic-release
+
