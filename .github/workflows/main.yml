@@ -1,0 +1,56 @@
+name: test and release
+
+on:
+  schedule:
+    - cron: "0 0 * * 1"
+  push:
+    branches: 
+      - master
+      - test
+      - beta
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+        
+      - name: install terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.4.6
+      
+      - name: Install semantic-release plugins
+        run: |
+          npm install @semantic-release/github -D
+          npm install @semantic-release/changelog -D
+
+      - name: Lint
+        run: docker run --rm -v "$(pwd):/data" -t ghcr.io/terraform-linters/tflint-bundle:latest
+      
+      - name: terraform fmt
+        run: terraform fmt -check
+
+      - name: terraform plan
+        env:
+          SCW_ACCESS_KEY: ${{ secrets.SCW_ACCESS_KEY }}
+          SCW_SECRET_KEY: ${{ secrets.SCW_SECRET_KEY }}
+          SCW_DEFAULT_PROJECT_ID: ${{ secrets.SCW_DEFAULT_PROJECT_ID }}
+        run: |
+            cd examples/terraform/cluster
+            terraform init
+            terraform plan
+
+      - name: Check tfdocs
+        run: docker run --rm --volume "$(pwd):/terraform-docs" -u "$(id -u)" quay.io/terraform-docs/terraform-docs:latest /terraform-docs --output-check
+
+      
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release
+        if: ${{ github.event_name == 'push' }}
+
