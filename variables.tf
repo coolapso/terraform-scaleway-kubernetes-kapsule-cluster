@@ -114,3 +114,9 @@ variable "as_expandable_pods_priority_cutoff" {
   description = "Pods with priority below cutoff will be expendable"
   default     = null
 }
+
+variable "enable_cluster_autoscaler" {
+  type        = bool
+  description = "Enable cluster autoscaler"
+  default     = false
+}

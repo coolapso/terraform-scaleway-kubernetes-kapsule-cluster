@@ -15,14 +15,19 @@ resource "scaleway_k8s_cluster" "k8s_cluster" {
     maintenance_window_day        = var.maintenance_window_day
   }
 
-  autoscaler_config {
-    disable_scale_down              = var.as_disable_scaledown
-    scale_down_delay_after_add      = var.as_scale_down_delay_after_add
-    scale_down_unneeded_time        = var.as_scale_down_unneeded_time
-    estimator                       = var.as_estimator
-    expander                        = var.as_expander
-    ignore_daemonsets_utilization   = var.as_ignore_daemonsets_utilization
-    balance_similar_node_groups     = var.as_balance_similar_node_groups
-    expendable_pods_priority_cutoff = var.as_expandable_pods_priority_cutoff
+  dynamic "autoscaler_config" {
+    for_each = var.enable_cluster_autoscaler ? [1] : []
+
+    content {
+
+      disable_scale_down              = var.as_disable_scaledown
+      scale_down_delay_after_add      = var.as_scale_down_delay_after_add
+      scale_down_unneeded_time        = var.as_scale_down_unneeded_time
+      estimator                       = var.as_estimator
+      expander                        = var.as_expander
+      ignore_daemonsets_utilization   = var.as_ignore_daemonsets_utilization
+      balance_similar_node_groups     = var.as_balance_similar_node_groups
+      expendable_pods_priority_cutoff = var.as_expandable_pods_priority_cutoff
+    }
   }
 }
