@@ -1,17 +1,16 @@
-include {
-  path = find_in_parent_folders()
+locals {
+  tags               = ["example", "test", "ci"]
+  enable_autoscaling = false
 }
 
-terraform {
+module "k8s-cluster" {
   source = "../../../"
-}
 
-/* add inputs here to override global inputs */
-inputs = {
   cluster_name                = "test-cluster"
   cluster_description         = "My Test scaleway kapsule"
   cluster_version             = "1.27"
   cluster_cni                 = "calico"
+  cluster_tags                = local.tags
   delete_additional_resources = true
   auto_upgrade                = true
 }

@@ -1,2 +1,4 @@
-.terra*
+.terraform/*
+.terraform.lock.hcl
+.terragrunt*
 *.tfstate*

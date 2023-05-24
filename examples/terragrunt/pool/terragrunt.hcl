@@ -25,5 +25,4 @@ inputs = {
   pool_max_surge              = 5
   pool_max_unavailable        = 1
   pool_autohealing            = true
-  pool_container_runtime      = "crio"
 }
