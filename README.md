@@ -1,20 +1,14 @@
 [![Build Status](https://travis-ci.com/4s3ti/kapsule-cluster.svg?branch=master)](https://travis-ci.com/4s3ti/kapsule-cluster)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
-# Terraform Scaleway Kapsule
+# Terraform Scaleway kubernetes kapsule 
 
 A Terraform module that creates a simple Kubernetes kapsule cluster,
-Nodes are added using [Kapsule-pool](https://github.com/4s3ti/kapsule-pool) module.
-
-## Module Requirements
-
-* terraform > 0.13
-* Scaleway account
-
+Nodes are added using [Kapsule-pool](https://github.com/4s3ti/terraform-scaleway-kubernetes-kapsule-pool) module.
 
 ## How to use
 
-Examples directory contains examples on how to use this module and add nodes to it.  
+[Examples](./examples) directory contains examples on how to use this module and add nodes to it.  
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
@@ -76,3 +70,11 @@ No modules.
 | <a name="output_cluster_upgrade_available"></a> [cluster\_upgrade\_available](#output\_cluster\_upgrade\_available) | Set to `true` if a newer Kubernetes version is available. |
 | <a name="output_cluster_wildcard_dns"></a> [cluster\_wildcard\_dns](#output\_cluster\_wildcard\_dns) | The DNS wildcard that points to all ready nodes. |
 <!-- END_TF_DOCS -->
+
+# Contributions
+
+Improvements and suggestions are always welcome, feel free to open an Issue or Pull Request
+
+If you like this theme and want to support / contribute in a different way you can always: 
+
+<a href="https://www.buymeacoffee.com/4s3ti" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-yellow.png" alt="Buy Me A Coffee" style="height: 51px !important;width: 217px !important;" >
