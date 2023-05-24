@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/4s3ti/kapsule-cluster.svg?branch=master)](https://travis-ci.com/4s3ti/kapsule-cluster)
+![master](https://github.com/github/docs/actions/workflows/main.yml/badge.svg?branch=master)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
 # Terraform Scaleway kubernetes kapsule 
