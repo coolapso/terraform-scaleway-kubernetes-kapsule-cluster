@@ -7,7 +7,7 @@ A Terraform module for a Scaleway Kapsule Kubernetes cluster. It creates the
 control plane; create node pools with `scaleway_k8s_pool` resources or a pool
 module appropriate for your environment.
 
-Requires Terraform 1.6 or later, Scaleway provider 2.83 or later, and a
+Requires Terraform 1.6 or later, Scaleway provider 2.83.x, and a
 Scaleway Private Network. Recent Kapsule clusters must be attached to a Private
 Network.
 
