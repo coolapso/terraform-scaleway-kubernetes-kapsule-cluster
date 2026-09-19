@@ -1,22 +1,22 @@
 # Working on this module
 
-This repository contains a Terraform module for a Scaleway Kapsule control
+This repository contains an OpenTofu module for a Scaleway Kapsule control
 plane. Keep changes focused and use the Taskfile as the entry point for local
 and CI work.
 
 ## Commands
 
 Run `task --list` before choosing a task. The normal verification command is
-`task ci`; it runs formatting, Terraform validation, TFLint, terraform-docs,
-and Terratest. Use `task docs` after changing inputs, outputs, provider
-constraints, or resource declarations. It regenerates the marked section of
+`task ci`; it runs formatting, OpenTofu validation, TFLint, terraform-docs,
+and native OpenTofu tests. Use `task docs` after changing inputs, outputs,
+provider constraints, or resource declarations. It regenerates the marked section of
 `README.md`; do not hand-edit that section.
 
-`task test:native` runs native Terraform tests with a mocked Scaleway provider
+`task test:native` runs native OpenTofu tests with a mocked Scaleway provider
 and `command = plan`. It must never gain an apply, destroy, real key, state
 file, or production fixture. Tests should assert a user-visible resource
-contract from the plan. Mock providers require Terraform 1.7 or later; CI uses
-Terraform 1.16.3. See [docs/testing.md](docs/testing.md) before adding
+contract from the plan. CI uses the version in `.opentofu-version`. See
+[docs/testing.md](docs/testing.md) before adding
 Terratest or a real-cloud integration test.
 
 Use `task release:check` to run all checks and preview the next release. Use
@@ -25,9 +25,9 @@ Use `task release:check` to run all checks and preview the next release. Use
 and push a Git tag, and create a GitHub
 release. semrel derives versions from Conventional Commit messages.
 
-## Terraform conventions
+## OpenTofu conventions
 
-- Keep the root module compatible with Terraform `>= 1.6.0, < 2.0.0` and the
+- Keep the root module compatible with OpenTofu `>= 1.12.0, < 2.0.0` and the
   Scaleway provider `~> 2.83` unless a deliberate compatibility change is
   documented.
 - Kapsule clusters require `private_network_id`. Treat a change to that input
@@ -35,11 +35,11 @@ release. semrel derives versions from Conventional Commit messages.
   upgrade note.
 - Keep input descriptions clear, add validation when it prevents a known
   provider failure, and mark secret-derived outputs `sensitive`.
-- Examples are independently linted Terraform roots. Give each example its
-  own Terraform and provider constraints, and keep them valid with the current
+- Examples are independently linted OpenTofu roots. Give each example its
+  own OpenTofu and provider constraints, and keep them valid with the current
   provider schema.
-- Do not commit `.terraform/`, `.terraform.lock.hcl`, state, plans, provider
-  credentials, or semrel plugin binaries.
+- Do not commit `.terraform/`, `.tofu/`, `.terraform.lock.hcl`,
+  `.tofu.lock.hcl`, state, plans, provider credentials, or semrel plugin binaries.
 
 ## Change discipline
 

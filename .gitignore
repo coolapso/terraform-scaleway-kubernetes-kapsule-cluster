@@ -1,5 +1,7 @@
 .terraform/
 .terraform.lock.hcl
+.tofu/
+.tofu.lock.hcl
 .terragrunt*
 .semrel/*/
 .semrel-analytics.jsonl

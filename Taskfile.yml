@@ -1,7 +1,7 @@
 version: '3'
 
 vars:
-  TERRAFORM: '{{default "terraform" .TERRAFORM}}'
+  TOFU: '{{default "tofu" .TOFU}}'
 
 tasks:
   default:
@@ -10,45 +10,45 @@ tasks:
       - task --list
 
   fmt:
-    desc: Format Terraform configuration
+    desc: Format OpenTofu configuration
     cmds:
-      - '{{.TERRAFORM}} fmt -recursive'
+      - '{{.TOFU}} fmt -recursive'
 
   fmt:check:
-    desc: Check Terraform formatting
+    desc: Check OpenTofu formatting
     cmds:
-      - '{{.TERRAFORM}} fmt -check -recursive'
+      - '{{.TOFU}} fmt -check -recursive'
 
   init:
     desc: Initialize the root module without configuring a backend
     cmds:
-      - '{{.TERRAFORM}} init -backend=false'
+      - '{{.TOFU}} init -backend=false'
 
   validate:
-    desc: Initialize and validate the root module
+    desc: Initialize and validate the root module with OpenTofu
     deps: [init]
     cmds:
-      - '{{.TERRAFORM}} validate'
+      - '{{.TOFU}} validate'
 
   lint:
-    desc: Lint all Terraform configurations with TFLint
+    desc: Lint all OpenTofu configurations with TFLint
     cmds:
       - tflint --recursive
 
   docs:
-    desc: Regenerate Terraform input and output documentation in README.md
+    desc: Regenerate OpenTofu input and output documentation in README.md
     cmds:
       - terraform-docs markdown table .
 
   docs:check:
-    desc: Check that Terraform documentation in README.md is current
+    desc: Check that OpenTofu documentation in README.md is current
     cmds:
       - terraform-docs markdown table --output-check .
 
   test:native:
-    desc: Run mocked native Terraform tests without creating infrastructure
+    desc: Run mocked native OpenTofu tests without creating infrastructure
     cmds:
-      - '{{.TERRAFORM}} test -no-color'
+      - '{{.TOFU}} test -no-color'
 
   test:
     desc: Run all module tests

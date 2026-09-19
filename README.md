@@ -1,13 +1,13 @@
 ![CI](https://github.com/coolapso/terraform-scaleway-kubernetes-kapsule-cluster/actions/workflows/ci.yml/badge.svg?branch=master)
-[![Terraform Registry](https://img.shields.io/badge/Terraform-Registry-623CE4?logo=terraform)](https://registry.terraform.io/)
+[![OpenTofu](https://img.shields.io/badge/OpenTofu-1F6FEB?logo=opentofu)](https://opentofu.org/)
 
-# Terraform Scaleway Kubernetes Kapsule cluster
+# OpenTofu Scaleway Kubernetes Kapsule cluster
 
-A Terraform module for a Scaleway Kapsule Kubernetes cluster. It creates the
+An OpenTofu module for a Scaleway Kapsule Kubernetes cluster. It creates the
 control plane; create node pools with `scaleway_k8s_pool` resources or a pool
 module appropriate for your environment.
 
-Requires Terraform 1.6 or later, Scaleway provider 2.83.x, and a
+Requires OpenTofu 1.12 or later, Scaleway provider 2.83.x, and a
 Scaleway Private Network. Recent Kapsule clusters must be attached to a Private
 Network.
 
@@ -29,13 +29,16 @@ module "cluster" {
 }
 ```
 
-See the [Terraform examples](./examples/terraform), [Terragrunt example](./examples/terragrunt),
+See the [OpenTofu examples](./examples/opentofu), [Terragrunt example](./examples/terragrunt),
 and [testing strategy](./docs/testing.md). Use a currently supported Kubernetes
 minor version; Scaleway documents its current support window.
 
 ## Upgrade notes
 
-Version 2 of this module raises the Terraform and Scaleway provider minimums.
+Version 2 of this module moves local development and CI to OpenTofu 1.12 and
+raises the Scaleway provider minimum. Terraform is no longer a supported
+execution environment. The configuration remains standard HCL, but validate
+consumer environments with `tofu plan` before upgrading.
 It also adds the required `private_network_id` input because current Kapsule
 clusters require a Private Network. Before upgrading an existing cluster, read
 the provider migration guidance and run a plan against your own configuration
@@ -46,7 +49,7 @@ to review the proposed change.
 
 | Name | Version |
 | ---- | ------- |
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.6.0, < 2.0.0 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.12.0, < 2.0.0 |
 | <a name="requirement_scaleway"></a> [scaleway](#requirement\_scaleway) | ~> 2.83 |
 
 ## Providers
@@ -112,9 +115,9 @@ Run `task --list` to discover formatting, linting, documentation, test, CI, and
 release tasks. The checks run by GitHub Actions are the same Task targets that
 run locally.
 
-The local toolchain is Terraform, Task, TFLint, terraform-docs, and semrel.
-`task ci` does not create cloud resources: native Terraform tests use a mocked
-provider and `command = plan`; mocked tests require Terraform 1.7 or later.
+The local toolchain is OpenTofu, Task, TFLint, terraform-docs, and semrel.
+Install the version in `.opentofu-version`. `task ci` does not create cloud
+resources: native OpenTofu tests use a mocked provider and `command = plan`.
 `task release:check` previews the release, while
 `task release` creates the tag, changelog commit, and GitHub release.
 Set `SEMREL_PLUGIN_TOKEN` to a GitHub token with repository write access before
