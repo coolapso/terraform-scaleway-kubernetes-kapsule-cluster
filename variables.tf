@@ -76,13 +76,13 @@ variable "cluster_admission_plugins" {
 
 variable "apiserver_cert_sans" {
   type        = list(string)
-  description = "K8s API server addittional Subject Alternative Names"
+  description = "Additional Subject Alternative Names for the Kubernetes API server"
   default     = null
 }
 
 variable "delete_additional_resources" {
   type        = bool
-  description = "Delete additional resources like block volumes and loadbalancers that were created in Kubernetes on cluster deletion"
+  description = "Delete additional resources such as block volumes and load balancers created by Kubernetes when the cluster is deleted"
 }
 
 variable "auto_upgrade" {

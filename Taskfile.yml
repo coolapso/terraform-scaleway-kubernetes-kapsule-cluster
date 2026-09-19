@@ -1,0 +1,78 @@
+version: '3'
+
+vars:
+  TERRAFORM: '{{default "terraform" .TERRAFORM}}'
+
+tasks:
+  default:
+    desc: List available development tasks
+    cmds:
+      - task --list
+
+  fmt:
+    desc: Format Terraform configuration
+    cmds:
+      - '{{.TERRAFORM}} fmt -recursive'
+
+  fmt:check:
+    desc: Check Terraform formatting
+    cmds:
+      - '{{.TERRAFORM}} fmt -check -recursive'
+
+  init:
+    desc: Initialize the root module without configuring a backend
+    cmds:
+      - '{{.TERRAFORM}} init -backend=false'
+
+  validate:
+    desc: Initialize and validate the root module
+    deps: [init]
+    cmds:
+      - '{{.TERRAFORM}} validate'
+
+  lint:
+    desc: Lint all Terraform configurations with TFLint
+    cmds:
+      - tflint --recursive
+
+  docs:
+    desc: Regenerate Terraform input and output documentation in README.md
+    cmds:
+      - terraform-docs markdown table .
+
+  docs:check:
+    desc: Check that Terraform documentation in README.md is current
+    cmds:
+      - terraform-docs markdown table --output-check .
+
+  test:terratest:
+    desc: Run the Terratest plan tests without creating infrastructure
+    cmds:
+      - go test ./test/... -count=1 -timeout 10m
+
+  test:
+    desc: Run all module tests
+    deps: [test:terratest]
+
+  ci:
+    desc: Run every check used by continuous integration
+    deps: [fmt:check, validate, lint, docs:check, test]
+
+  release:plugins:
+    desc: Restore the semrel release plugins pinned in .semrel.lock
+    cmds:
+      - semrel plugin restore
+
+  release:check:
+    desc: Run CI checks and preview the next release without changing GitHub or git
+    deps: [ci, release:plugins]
+    cmds:
+      - semrel doctor
+      - semrel lint
+      - semrel release --dry-run
+
+  release:
+    desc: Create and publish a release from master; requires GitHub credentials
+    deps: [release:check]
+    cmds:
+      - semrel release

@@ -38,22 +38,22 @@ Kubernetes minor version; Scaleway documents its current support window.
 Version 2 of this module raises the Terraform and Scaleway provider minimums.
 It also adds the required `private_network_id` input because current Kapsule
 clusters require a Private Network. Before upgrading an existing cluster, read
-the provider migration guidance and run `task test:plan` with production
+the provider migration guidance and run `task test:terratest` with production
 credentials to review the proposed change.
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
-|------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.13 |
-| <a name="requirement_scaleway"></a> [scaleway](#requirement\_scaleway) | ~>2.1.0 |
+| ---- | ------- |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.6.0, < 2.0.0 |
+| <a name="requirement_scaleway"></a> [scaleway](#requirement\_scaleway) | ~> 2.83 |
 
 ## Providers
 
 | Name | Version |
-|------|---------|
-| <a name="provider_scaleway"></a> [scaleway](#provider\_scaleway) | ~>2.1.0 |
+| ---- | ------- |
+| <a name="provider_scaleway"></a> [scaleway](#provider\_scaleway) | ~> 2.83 |
 
 ## Modules
 
@@ -62,14 +62,14 @@ No modules.
 ## Resources
 
 | Name | Type |
-|------|------|
+| ---- | ---- |
 | [scaleway_k8s_cluster.k8s_cluster](https://registry.terraform.io/providers/scaleway/scaleway/latest/docs/resources/k8s_cluster) | resource |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
-| <a name="input_apiserver_cert_sans"></a> [apiserver\_cert\_sans](#input\_apiserver\_cert\_sans) | K8s API server addittional Subject Alternative Names | `list(string)` | `null` | no |
+| ---- | ----------- | ---- | ------- | :------: |
+| <a name="input_apiserver_cert_sans"></a> [apiserver\_cert\_sans](#input\_apiserver\_cert\_sans) | Additional Subject Alternative Names for the Kubernetes API server | `list(string)` | `null` | no |
 | <a name="input_as_balance_similar_node_groups"></a> [as\_balance\_similar\_node\_groups](#input\_as\_balance\_similar\_node\_groups) | Detect similar node groups and balance the number of nodes between them | `bool` | `null` | no |
 | <a name="input_as_disable_scaledown"></a> [as\_disable\_scaledown](#input\_as\_disable\_scaledown) | Disables auto-scaler scale down feature | `bool` | `null` | no |
 | <a name="input_as_estimator"></a> [as\_estimator](#input\_as\_estimator) | Type of resource estimator to be used in scale up | `string` | `null` | no |
@@ -85,16 +85,19 @@ No modules.
 | <a name="input_cluster_feature_gates"></a> [cluster\_feature\_gates](#input\_cluster\_feature\_gates) | The list of feature gates to enable on the cluster | `list(string)` | `null` | no |
 | <a name="input_cluster_name"></a> [cluster\_name](#input\_cluster\_name) | The name for the Kubernetes cluster | `string` | n/a | yes |
 | <a name="input_cluster_tags"></a> [cluster\_tags](#input\_cluster\_tags) | List of tags to be applied to the cluster | `list(string)` | `null` | no |
+| <a name="input_cluster_type"></a> [cluster\_type](#input\_cluster\_type) | The Kapsule cluster type. Use kapsule for a mutualized Kapsule control plane. | `string` | `"kapsule"` | no |
 | <a name="input_cluster_version"></a> [cluster\_version](#input\_cluster\_version) | The version of the Kubernetes cluster | `string` | n/a | yes |
-| <a name="input_delete_additional_resources"></a> [delete\_additional\_resources](#input\_delete\_additional\_resources) | Delete additional resources like block volumes and loadbalancers that were created in Kubernetes on cluster deletion | `bool` | n/a | yes |
+| <a name="input_delete_additional_resources"></a> [delete\_additional\_resources](#input\_delete\_additional\_resources) | Delete additional resources such as block volumes and load balancers created by Kubernetes when the cluster is deleted | `bool` | n/a | yes |
 | <a name="input_enable_cluster_autoscaler"></a> [enable\_cluster\_autoscaler](#input\_enable\_cluster\_autoscaler) | Enable cluster autoscaler | `bool` | `false` | no |
 | <a name="input_maintenance_window_day"></a> [maintenance\_window\_day](#input\_maintenance\_window\_day) | The day of the auto upgrade maintenance window (monday to sunday, or any) | `string` | `"any"` | no |
 | <a name="input_maintenance_window_start_hour"></a> [maintenance\_window\_start\_hour](#input\_maintenance\_window\_start\_hour) | The start hour (UTC) of the 2-hour auto upgrade maintenance window (0 to 23) | `number` | `0` | no |
+| <a name="input_private_network_id"></a> [private\_network\_id](#input\_private\_network\_id) | ID of the Scaleway Private Network attached to the cluster. Kapsule requires one. | `string` | n/a | yes |
+| <a name="input_region"></a> [region](#input\_region) | Scaleway region in which to create the cluster. If null, uses the provider default. | `string` | `null` | no |
 
 ## Outputs
 
 | Name | Description |
-|------|-------------|
+| ---- | ----------- |
 | <a name="output_cluster_apiserver_url"></a> [cluster\_apiserver\_url](#output\_cluster\_apiserver\_url) | The URL of the Kubernetes API server. |
 | <a name="output_cluster_id"></a> [cluster\_id](#output\_cluster\_id) | The ID of the cluster. |
 | <a name="output_cluster_kubeconfig"></a> [cluster\_kubeconfig](#output\_cluster\_kubeconfig) | The Kubernetes configuration. |
@@ -108,3 +111,8 @@ No modules.
 Run `task --list` to discover formatting, linting, documentation, test, CI, and
 release tasks. The checks run by GitHub Actions are the same Task targets that
 run locally.
+
+The local toolchain is Terraform, Go, Task, TFLint, terraform-docs, and semrel.
+`task ci` does not create cloud resources: its Terratest suite uses
+`terraform plan` only. `task release:check` previews the release, while
+`task release` creates the tag, changelog commit, and GitHub release.

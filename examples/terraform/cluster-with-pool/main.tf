@@ -21,17 +21,13 @@ module "k8s-cluster" {
 }
 
 
-module "k8s-pool" {
-  source = "github.com/4s3ti/kapsule-pool"
-
-  kapsule_cluster_id     = module.k8s-cluster.cluster_id
-  pool_name              = "test"
-  pool_node_type         = "DEV1-M"
-  pool_size              = 2
-  pool_autoscaling       = local.enable_autoscaling
-  pool_autohealing       = false
-  pool_container_runtime = "crio"
-  pool_tags              = local.tags
-
-  depends_on = [module.k8s-cluster]
+resource "scaleway_k8s_pool" "this" {
+  cluster_id  = module.k8s-cluster.cluster_id
+  name        = "test"
+  node_type   = "DEV1-M"
+  size        = 2
+  autoscaling = local.enable_autoscaling
+  autohealing = false
+  tags        = local.tags
+  depends_on  = [module.k8s-cluster]
 }
