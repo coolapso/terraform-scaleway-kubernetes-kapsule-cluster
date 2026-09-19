@@ -1,0 +1,77 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+
+      - uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_version: 1.16.3
+          terraform_wrapper: false
+
+      - uses: arduino/setup-task@v2
+
+      - uses: terraform-linters/setup-tflint@v6
+        with:
+          tflint_version: v0.64.0
+
+      - name: Install terraform-docs and semrel
+        run: |
+          go install github.com/terraform-docs/terraform-docs@v0.24.0
+          go install github.com/SemRels/semrel/cmd/semrel@v0.26.2
+
+      - name: Run CI checks
+        run: task ci
+
+  release:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    needs: ci
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+
+      - uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_version: 1.16.3
+          terraform_wrapper: false
+
+      - uses: arduino/setup-task@v2
+
+      - uses: terraform-linters/setup-tflint@v6
+        with:
+          tflint_version: v0.64.0
+
+      - name: Install terraform-docs and semrel
+        run: |
+          go install github.com/terraform-docs/terraform-docs@v0.24.0
+          go install github.com/SemRels/semrel/cmd/semrel@v0.26.2
+
+      - name: Release
+        env:
+          SEMREL_PLUGIN_TOKEN: ${{ github.token }}
+        run: task release

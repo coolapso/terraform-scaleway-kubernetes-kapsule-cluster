@@ -116,3 +116,5 @@ The local toolchain is Terraform, Go, Task, TFLint, terraform-docs, and semrel.
 `task ci` does not create cloud resources: its Terratest suite uses
 `terraform plan` only. `task release:check` previews the release, while
 `task release` creates the tag, changelog commit, and GitHub release.
+Set `SEMREL_PLUGIN_TOKEN` to a GitHub token with repository write access before
+running a real release outside GitHub Actions.

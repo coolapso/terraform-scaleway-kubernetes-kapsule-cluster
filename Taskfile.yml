@@ -58,7 +58,12 @@ tasks:
 
   ci:
     desc: Run every check used by continuous integration
-    deps: [fmt:check, validate, lint, docs:check, test]
+    cmds:
+      - task fmt:check
+      - task validate
+      - task lint
+      - task docs:check
+      - task test
 
   release:plugins:
     desc: Restore the semrel release plugins pinned in .semrel.lock
@@ -73,8 +78,14 @@ tasks:
       - semrel lint
       - semrel release --dry-run
 
+  release:prepare:
+    internal: true
+    cmds:
+      - 'git config user.name >/dev/null || git config user.name "${GIT_RELEASE_NAME:-github-actions[bot]}"'
+      - 'git config user.email >/dev/null || git config user.email "${GIT_RELEASE_EMAIL:-41898282+github-actions[bot]@users.noreply.github.com}"'
+
   release:
     desc: Create and publish a release from master; requires GitHub credentials
-    deps: [release:check]
+    deps: [release:check, release:prepare]
     cmds:
       - semrel release
