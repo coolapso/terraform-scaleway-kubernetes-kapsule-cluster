@@ -2,4 +2,5 @@
 .terraform.lock.hcl
 .terragrunt*
 .semrel/*/
+.semrel-analytics.jsonl
 *.tfstate*
