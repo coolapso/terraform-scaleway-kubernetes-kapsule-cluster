@@ -1,14 +1,45 @@
-![master](https://github.com/github/docs/actions/workflows/main.yml/badge.svg?branch=master)
-[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
+![CI](https://github.com/coolapso/terraform-scaleway-kubernetes-kapsule-cluster/actions/workflows/ci.yml/badge.svg?branch=master)
+[![Terraform Registry](https://img.shields.io/badge/Terraform-Registry-623CE4?logo=terraform)](https://registry.terraform.io/)
 
-# Terraform Scaleway kubernetes kapsule 
+# Terraform Scaleway Kubernetes Kapsule cluster
 
-A Terraform module that creates a simple Kubernetes kapsule cluster,
-Nodes are added using [Kapsule-pool](https://github.com/4s3ti/terraform-scaleway-kubernetes-kapsule-pool) module.
+A Terraform module for a Scaleway Kapsule Kubernetes cluster. It creates the
+control plane; create node pools with `scaleway_k8s_pool` resources or a pool
+module appropriate for your environment.
 
-## How to use
+Requires Terraform 1.6 or later, Scaleway provider 2.83 or later, and a
+Scaleway Private Network. Recent Kapsule clusters must be attached to a Private
+Network.
 
-[Examples](./examples) directory contains examples on how to use this module and add nodes to it.  
+## Usage
+
+```hcl
+resource "scaleway_vpc_private_network" "kapsule" {
+  name = "kapsule"
+}
+
+module "cluster" {
+  source = "coolapso/kubernetes-kapsule-cluster/scaleway"
+
+  cluster_name                = "production"
+  cluster_version             = "1.37"
+  cluster_cni                 = "cilium"
+  private_network_id          = scaleway_vpc_private_network.kapsule.id
+  delete_additional_resources = false
+}
+```
+
+See the [Terraform examples](./examples/terraform) and
+[Terragrunt example](./examples/terragrunt). Use a currently supported
+Kubernetes minor version; Scaleway documents its current support window.
+
+## Upgrade notes
+
+Version 2 of this module raises the Terraform and Scaleway provider minimums.
+It also adds the required `private_network_id` input because current Kapsule
+clusters require a Private Network. Before upgrading an existing cluster, read
+the provider migration guidance and run `task test:plan` with production
+credentials to review the proposed change.
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
@@ -72,10 +103,8 @@ No modules.
 | <a name="output_cluster_wildcard_dns"></a> [cluster\_wildcard\_dns](#output\_cluster\_wildcard\_dns) | The DNS wildcard that points to all ready nodes. |
 <!-- END_TF_DOCS -->
 
-# Contributions
+## Contributing
 
-Improvements and suggestions are always welcome, feel free to open an Issue or Pull Request
-
-If you like this theme and want to support / contribute in a different way you can always: 
-
-<a href="https://www.buymeacoffee.com/4s3ti" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-yellow.png" alt="Buy Me A Coffee" style="height: 51px !important;width: 217px !important;" >
+Run `task --list` to discover formatting, linting, documentation, test, CI, and
+release tasks. The checks run by GitHub Actions are the same Task targets that
+run locally.

@@ -1,8 +1,11 @@
 resource "scaleway_k8s_cluster" "k8s_cluster" {
   name                        = var.cluster_name
+  type                        = var.cluster_type
   description                 = var.cluster_description
   version                     = var.cluster_version
   cni                         = var.cluster_cni
+  region                      = var.region
+  private_network_id          = var.private_network_id
   tags                        = var.cluster_tags
   feature_gates               = var.cluster_feature_gates
   admission_plugins           = var.cluster_admission_plugins

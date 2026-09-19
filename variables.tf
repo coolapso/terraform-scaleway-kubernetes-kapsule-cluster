@@ -1,6 +1,17 @@
 variable "cluster_name" {
   type        = string
   description = "The name for the Kubernetes cluster"
+
+  validation {
+    condition     = length(trimspace(var.cluster_name)) > 0
+    error_message = "cluster_name must not be empty."
+  }
+}
+
+variable "cluster_type" {
+  type        = string
+  description = "The Kapsule cluster type. Use kapsule for a mutualized Kapsule control plane."
+  default     = "kapsule"
 }
 
 variable "cluster_description" {
@@ -12,11 +23,37 @@ variable "cluster_description" {
 variable "cluster_version" {
   type        = string
   description = "The version of the Kubernetes cluster"
+
+  validation {
+    condition     = can(regex("^1\\.[0-9]+(?:\\.[0-9]+)?$", var.cluster_version))
+    error_message = "cluster_version must be a Kubernetes version such as 1.37 or 1.37.1."
+  }
 }
 
 variable "cluster_cni" {
   type        = string
   description = "Container Network Interface (CNI) to be installed"
+
+  validation {
+    condition     = contains(["calico", "cilium"], var.cluster_cni)
+    error_message = "cluster_cni must be either calico or cilium for a Kapsule cluster."
+  }
+}
+
+variable "private_network_id" {
+  type        = string
+  description = "ID of the Scaleway Private Network attached to the cluster. Kapsule requires one."
+
+  validation {
+    condition     = length(trimspace(var.private_network_id)) > 0
+    error_message = "private_network_id must not be empty."
+  }
+}
+
+variable "region" {
+  type        = string
+  description = "Scaleway region in which to create the cluster. If null, uses the provider default."
+  default     = null
 }
 
 variable "cluster_tags" {
@@ -58,12 +95,22 @@ variable "maintenance_window_start_hour" {
   type        = number
   description = "The start hour (UTC) of the 2-hour auto upgrade maintenance window (0 to 23)"
   default     = 0
+
+  validation {
+    condition     = var.maintenance_window_start_hour >= 0 && var.maintenance_window_start_hour <= 23
+    error_message = "maintenance_window_start_hour must be between 0 and 23."
+  }
 }
 
 variable "maintenance_window_day" {
   type        = string
   description = "The day of the auto upgrade maintenance window (monday to sunday, or any)"
   default     = "any"
+
+  validation {
+    condition     = contains(["any", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"], var.maintenance_window_day)
+    error_message = "maintenance_window_day must be any or a lowercase day of the week."
+  }
 }
 
 variable "as_disable_scaledown" {
