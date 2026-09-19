@@ -115,9 +115,8 @@ Run `task --list` to discover formatting, linting, documentation, test, CI, and
 release tasks. The checks run by GitHub Actions are the same Task targets that
 run locally.
 
-The local toolchain is OpenTofu, Task, TFLint, Docker, and semrel. Task runs
-the pinned terraform-docs v0.20.0 container when generating or checking
-documentation.
+The local toolchain is OpenTofu, Docker, Task, and semrel. Task runs pinned
+terraform-docs and TFLint containers for documentation and linting.
 Install the version in `.opentofu-version`. `task ci` does not create cloud
 resources: native OpenTofu tests use a mocked provider and `command = plan`.
 `task release:check` previews the release, while

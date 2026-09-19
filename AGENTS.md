@@ -12,6 +12,9 @@ and native OpenTofu tests. Use `task docs` after changing inputs, outputs,
 provider constraints, or resource declarations. It regenerates the marked section of
 `README.md`; do not hand-edit that section.
 
+`task lint` uses the pinned TFLint Docker image; do not add a local TFLint
+installation.
+
 `task test:native` runs native OpenTofu tests with a mocked Scaleway provider
 and `command = plan`. It must never gain an apply, destroy, real key, state
 file, or production fixture. Tests should assert a user-visible resource

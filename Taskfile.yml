@@ -4,6 +4,8 @@ vars:
   TOFU: '{{default "tofu" .TOFU}}'
   # terraform-docs v0.20.0
   TERRAFORM_DOCS_IMAGE: 'quay.io/terraform-docs/terraform-docs@sha256:37329e2dc2518e7f719a986a3954b10771c3fe000f50f83fd4d98d489df2eae2'
+  # TFLint v0.64.0
+  TFLINT_IMAGE: 'ghcr.io/terraform-linters/tflint@sha256:1c595f42d794c32c45a6ea8b58655fd66433d4ca3b1bc631c574a48d120bd19f'
 
 tasks:
   default:
@@ -33,9 +35,9 @@ tasks:
       - '{{.TOFU}} validate'
 
   lint:
-    desc: Lint all OpenTofu configurations with TFLint
+    desc: Lint all OpenTofu configurations with Docker
     cmds:
-      - tflint --recursive
+      - 'docker run --rm --volume "{{.ROOT_DIR}}:/tflint" --workdir /tflint --user "$(id -u):$(id -g)" {{.TFLINT_IMAGE}} --recursive'
 
   docs:
     desc: Regenerate OpenTofu input and output documentation in README.md

@@ -28,10 +28,6 @@ jobs:
 
       - uses: arduino/setup-task@v2
 
-      - uses: terraform-linters/setup-tflint@v6
-        with:
-          tflint_version: v0.64.0
-
       - name: Run CI checks
         run: task ci
 
@@ -59,10 +55,6 @@ jobs:
           tofu_wrapper: false
 
       - uses: arduino/setup-task@v2
-
-      - uses: terraform-linters/setup-tflint@v6
-        with:
-          tflint_version: v0.64.0
 
       - name: Install semrel
         run: go install github.com/SemRels/semrel/cmd/semrel@v0.26.2
