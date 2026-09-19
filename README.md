@@ -38,8 +38,8 @@ Kubernetes minor version; Scaleway documents its current support window.
 Version 2 of this module raises the Terraform and Scaleway provider minimums.
 It also adds the required `private_network_id` input because current Kapsule
 clusters require a Private Network. Before upgrading an existing cluster, read
-the provider migration guidance and run `task test:terratest` with production
-credentials to review the proposed change.
+the provider migration guidance and run a plan against your own configuration
+to review the proposed change.
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements

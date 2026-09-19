@@ -142,6 +142,11 @@ variable "as_expander" {
   type        = string
   description = "Type of node group expander to be used in scale up"
   default     = null
+
+  validation {
+    condition     = var.as_expander == null || contains(["random", "most_pods", "least_waste", "priority", "price"], var.as_expander)
+    error_message = "as_expander must be random, most_pods, least_waste, priority, or price."
+  }
 }
 
 variable "as_ignore_daemonsets_utilization" {

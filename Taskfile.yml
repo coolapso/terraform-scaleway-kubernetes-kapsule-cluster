@@ -47,6 +47,8 @@ tasks:
 
   test:terratest:
     desc: Run the Terratest plan tests without creating infrastructure
+    env:
+      TERRAFORM_BINARY: '{{.TERRAFORM}}'
     cmds:
       - go test ./test/... -count=1 -timeout 10m
 
