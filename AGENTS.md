@@ -12,10 +12,12 @@ and Terratest. Use `task docs` after changing inputs, outputs, provider
 constraints, or resource declarations. It regenerates the marked section of
 `README.md`; do not hand-edit that section.
 
-`task test:terratest` runs `terraform plan` only. It uses placeholder
-credentials that satisfy the Scaleway provider's local format validation and
-must never gain an apply, destroy, real key, state file, or production fixture.
-Tests should assert a user-visible resource contract from the plan.
+`task test:native` runs native Terraform tests with a mocked Scaleway provider
+and `command = plan`. It must never gain an apply, destroy, real key, state
+file, or production fixture. Tests should assert a user-visible resource
+contract from the plan. Mock providers require Terraform 1.7 or later; CI uses
+Terraform 1.16.3. See [docs/testing.md](docs/testing.md) before adding
+Terratest or a real-cloud integration test.
 
 Use `task release:check` to run all checks and preview the next release. Use
 `task release` only from a clean `master` checkout with a

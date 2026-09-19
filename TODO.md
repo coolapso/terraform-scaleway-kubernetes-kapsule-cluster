@@ -6,6 +6,7 @@
 - [x] Move CI and releases behind Task targets and replace semantic-release with semrel.
 - [x] Document contributor and AI-agent conventions.
 - [x] Run the full local verification suite.
+- [x] Replace plan-only Terratest with mocked native Terraform tests and update CI guidance.
 
 This file is deliberately kept until the modernization is complete, so an
 interrupted maintenance session has an accurate hand-off point.

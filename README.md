@@ -29,9 +29,9 @@ module "cluster" {
 }
 ```
 
-See the [Terraform examples](./examples/terraform) and
-[Terragrunt example](./examples/terragrunt). Use a currently supported
-Kubernetes minor version; Scaleway documents its current support window.
+See the [Terraform examples](./examples/terraform), [Terragrunt example](./examples/terragrunt),
+and [testing strategy](./docs/testing.md). Use a currently supported Kubernetes
+minor version; Scaleway documents its current support window.
 
 ## Upgrade notes
 
@@ -112,9 +112,10 @@ Run `task --list` to discover formatting, linting, documentation, test, CI, and
 release tasks. The checks run by GitHub Actions are the same Task targets that
 run locally.
 
-The local toolchain is Terraform, Go, Task, TFLint, terraform-docs, and semrel.
-`task ci` does not create cloud resources: its Terratest suite uses
-`terraform plan` only. `task release:check` previews the release, while
+The local toolchain is Terraform, Task, TFLint, terraform-docs, and semrel.
+`task ci` does not create cloud resources: native Terraform tests use a mocked
+provider and `command = plan`; mocked tests require Terraform 1.7 or later.
+`task release:check` previews the release, while
 `task release` creates the tag, changelog commit, and GitHub release.
 Set `SEMREL_PLUGIN_TOKEN` to a GitHub token with repository write access before
 running a real release outside GitHub Actions.

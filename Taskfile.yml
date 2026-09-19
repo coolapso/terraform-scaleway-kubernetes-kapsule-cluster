@@ -45,16 +45,14 @@ tasks:
     cmds:
       - terraform-docs markdown table --output-check .
 
-  test:terratest:
-    desc: Run the Terratest plan tests without creating infrastructure
-    env:
-      TERRAFORM_BINARY: '{{.TERRAFORM}}'
+  test:native:
+    desc: Run mocked native Terraform tests without creating infrastructure
     cmds:
-      - go test ./test/... -count=1 -timeout 10m
+      - '{{.TERRAFORM}} test -no-color'
 
   test:
     desc: Run all module tests
-    deps: [test:terratest]
+    deps: [test:native]
 
   ci:
     desc: Run every check used by continuous integration
