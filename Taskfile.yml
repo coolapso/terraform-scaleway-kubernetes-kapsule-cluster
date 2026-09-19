@@ -2,6 +2,8 @@ version: '3'
 
 vars:
   TOFU: '{{default "tofu" .TOFU}}'
+  # terraform-docs v0.20.0
+  TERRAFORM_DOCS_IMAGE: 'quay.io/terraform-docs/terraform-docs@sha256:37329e2dc2518e7f719a986a3954b10771c3fe000f50f83fd4d98d489df2eae2'
 
 tasks:
   default:
@@ -38,12 +40,12 @@ tasks:
   docs:
     desc: Regenerate OpenTofu input and output documentation in README.md
     cmds:
-      - terraform-docs markdown table .
+      - 'docker run --rm --volume "{{.ROOT_DIR}}:/terraform-docs" --workdir /terraform-docs --user "$(id -u):$(id -g)" {{.TERRAFORM_DOCS_IMAGE}} markdown table .'
 
   docs:check:
     desc: Check that OpenTofu documentation in README.md is current
     cmds:
-      - terraform-docs markdown table --output-check .
+      - 'docker run --rm --volume "{{.ROOT_DIR}}:/terraform-docs" --workdir /terraform-docs --user "$(id -u):$(id -g)" {{.TERRAFORM_DOCS_IMAGE}} markdown table --output-check .'
 
   test:native:
     desc: Run mocked native OpenTofu tests without creating infrastructure

@@ -48,14 +48,14 @@ to review the proposed change.
 ## Requirements
 
 | Name | Version |
-| ---- | ------- |
+|------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.12.0, < 2.0.0 |
 | <a name="requirement_scaleway"></a> [scaleway](#requirement\_scaleway) | ~> 2.83 |
 
 ## Providers
 
 | Name | Version |
-| ---- | ------- |
+|------|---------|
 | <a name="provider_scaleway"></a> [scaleway](#provider\_scaleway) | ~> 2.83 |
 
 ## Modules
@@ -65,13 +65,13 @@ No modules.
 ## Resources
 
 | Name | Type |
-| ---- | ---- |
+|------|------|
 | [scaleway_k8s_cluster.k8s_cluster](https://registry.terraform.io/providers/scaleway/scaleway/latest/docs/resources/k8s_cluster) | resource |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-| ---- | ----------- | ---- | ------- | :------: |
+|------|-------------|------|---------|:--------:|
 | <a name="input_apiserver_cert_sans"></a> [apiserver\_cert\_sans](#input\_apiserver\_cert\_sans) | Additional Subject Alternative Names for the Kubernetes API server | `list(string)` | `null` | no |
 | <a name="input_as_balance_similar_node_groups"></a> [as\_balance\_similar\_node\_groups](#input\_as\_balance\_similar\_node\_groups) | Detect similar node groups and balance the number of nodes between them | `bool` | `null` | no |
 | <a name="input_as_disable_scaledown"></a> [as\_disable\_scaledown](#input\_as\_disable\_scaledown) | Disables auto-scaler scale down feature | `bool` | `null` | no |
@@ -100,7 +100,7 @@ No modules.
 ## Outputs
 
 | Name | Description |
-| ---- | ----------- |
+|------|-------------|
 | <a name="output_cluster_apiserver_url"></a> [cluster\_apiserver\_url](#output\_cluster\_apiserver\_url) | The URL of the Kubernetes API server. |
 | <a name="output_cluster_id"></a> [cluster\_id](#output\_cluster\_id) | The ID of the cluster. |
 | <a name="output_cluster_kubeconfig"></a> [cluster\_kubeconfig](#output\_cluster\_kubeconfig) | The Kubernetes configuration. |
@@ -115,7 +115,9 @@ Run `task --list` to discover formatting, linting, documentation, test, CI, and
 release tasks. The checks run by GitHub Actions are the same Task targets that
 run locally.
 
-The local toolchain is OpenTofu, Task, TFLint, terraform-docs, and semrel.
+The local toolchain is OpenTofu, Task, TFLint, Docker, and semrel. Task runs
+the pinned terraform-docs v0.20.0 container when generating or checking
+documentation.
 Install the version in `.opentofu-version`. `task ci` does not create cloud
 resources: native OpenTofu tests use a mocked provider and `command = plan`.
 `task release:check` previews the release, while
